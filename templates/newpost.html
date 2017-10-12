@@ -7,10 +7,18 @@
     <label>Title:
         <input type="text" name="title" />
     </label>
+    {% if titleerr %}
+        <br/>
+        <span class="error">{{ titleerr }}</span>
+    {% endif %}
     <br/>
     <label for="body">Your new post:</label>
     <br/>
     <textarea name="body" id="body" /></textarea>
+    {% if bodyerr %}
+        <br/>
+        <span class="error">{{ bodyerr }}</span>
+    {% endif %}
     <br/>
     <input type="submit" value="Add Entry" />
 </form>
