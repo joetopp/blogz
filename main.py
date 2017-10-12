@@ -21,6 +21,10 @@ class Blog(db.Model):
     def __repr__(self):
         return '<Title ' + self.title + '>'
 
+@app.route("/newpost")
+def newpost():
+    return render_template('newpost.html')
+
 @app.route("/blog")
 def blog():
     return render_template('blog.html')
