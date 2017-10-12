@@ -30,11 +30,16 @@ def newpost():
         newpost = Blog(title, body)
         db.session.add(newpost)
         db.session.commit()
-        
+        return redirect("/blog?id=" + str(newpost.id))
+
     return render_template('newpost.html')
 
 @app.route("/blog", methods=['GET', 'POST'])
 def blog():
+    postid = request.args.get("id")
+    if postid:
+        post = Blog.query.filter_by(id=int(postid)).first()
+        return render_template('post.html', title=post.title, body=post.body)
 
     bloglist = Blog.query.all()
     return render_template('blog.html', bloglist=bloglist)
