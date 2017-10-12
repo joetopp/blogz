@@ -21,12 +21,8 @@ class Blog(db.Model):
     def __repr__(self):
         return '<Title ' + self.title + '>'
 
-@app.route("/newpost")
+@app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
-    return render_template('newpost.html')
-
-@app.route("/blog", methods=['GET', 'POST'])
-def blog():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -34,6 +30,11 @@ def blog():
         newpost = Blog(title, body)
         db.session.add(newpost)
         db.session.commit()
+        
+    return render_template('newpost.html')
+
+@app.route("/blog", methods=['GET', 'POST'])
+def blog():
 
     bloglist = Blog.query.all()
     return render_template('blog.html', bloglist=bloglist)
