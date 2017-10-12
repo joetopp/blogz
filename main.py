@@ -25,9 +25,18 @@ class Blog(db.Model):
 def newpost():
     return render_template('newpost.html')
 
-@app.route("/blog")
+@app.route("/blog", methods=['GET', 'POST'])
 def blog():
-    return render_template('blog.html')
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+
+        newpost = Blog(title, body)
+        db.session.add(newpost)
+        db.session.commit()
+
+    bloglist = Blog.query.all()
+    return render_template('blog.html', bloglist=bloglist)
 
 if __name__ == "__main__":  
     app.run()
