@@ -2,10 +2,10 @@
 
 {% block content %}
 
-<h1>Build a Blog</h1>
+<h1 class="header">Build a Blog</h1>
 
 {% for blog in bloglist %}
-<h1>{{ blog.title }}</h1>
+<a href="/blog?id={{ blog.id }}"><h1>{{ blog.title }}</h1></a>
 <p>{{ blog.body }}</p>
 <hr />
 

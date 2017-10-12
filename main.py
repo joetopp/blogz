@@ -44,5 +44,9 @@ def blog():
     bloglist = Blog.query.all()
     return render_template('blog.html', bloglist=bloglist)
 
+@app.route("/")
+def index():
+    return redirect("/blog")
+
 if __name__ == "__main__":  
     app.run()
