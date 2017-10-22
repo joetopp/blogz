@@ -13,6 +13,7 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), unique=True)
     body = db.Column(db.String(1000))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self, title, body):
         self.title = title
@@ -20,6 +21,19 @@ class Blog(db.Model):
 
     def __repr__(self):
         return '<Title ' + self.title + '>'
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(200), unique=True)
+    blogs = db.relationship('Blog', backref='author')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return '<User ' + self.username + '>'
 
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
