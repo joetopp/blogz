@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 import cgi
 
@@ -39,14 +39,29 @@ class User(db.Model):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
         # TODO some validation
 
         #all is well
-
-        # TODO add user to session
+        session['username'] = username
         return redirect("/newpost")
 
     return render_template('login.html')
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+        # TODO some validation
+
+        #all is well
+        session['username'] = username
+        return redirect("/newpost")
+
+    return render_template('signup.html')
 
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
