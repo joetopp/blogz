@@ -15,9 +15,10 @@ class Blog(db.Model):
     body = db.Column(db.String(1000))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, author):
         self.title = title
         self.body = body
+        self.author = author
 
     def __repr__(self):
         return '<Title ' + self.title + '>'
@@ -34,6 +35,18 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User ' + self.username + '>'
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # TODO some validation
+
+        #all is well
+
+        # TODO add user to session
+        return redirect("/newpost")
+
+    return render_template('login.html')
 
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
@@ -52,6 +65,7 @@ def newpost():
         if titleerr != "" or bodyerr != "":
             return render_template("newpost.html", titleerr=titleerr, bodyerr=bodyerr)
 
+        # TODO: add user to constructuor
         newpost = Blog(title, body)
         db.session.add(newpost)
         db.session.commit()
