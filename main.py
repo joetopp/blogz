@@ -42,7 +42,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # TODO some validation
+
+        login_err = ""
+
+        user_real = User.query.filter_by(username=username).first()
+
+        if user_real:
+            if user_real.password != password:
+                login_err = "Your username and password don't match."
+        else:
+            login_err = "Invalid username."
+
+        if login_err != "":
+            return render_template("login.html",login_err=login_err, username=username)
 
         #all is well
         session['username'] = username
