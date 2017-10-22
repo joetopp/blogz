@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogstar@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
+app.secret_key = 'a;sdlfkjag;aoihq;eonmxxzmqlw193827'
 
 db = SQLAlchemy(app)
 
@@ -26,7 +27,7 @@ class Blog(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(200), unique=True)
+    password = db.Column(db.String(200))
     blogs = db.relationship('Blog', backref='author')
 
     def __init__(self, username, password):
@@ -55,10 +56,36 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        # TODO some validation
 
+        name_err = ""
+        pass_err = ""
+
+        #validate username
+        if username == "":
+            name_err = "Please enter a username."
+        elif len(username) < 3:
+            name_err = "Your username must be at least 3 characters."
+        elif User.query.filter_by(username=username).first():
+            name_err = "That username is already taken."
+
+        #validate password
+        if password == "":
+            pass_err = "Please enter a password."
+        elif len(password) < 3:
+            pass_err = "Your password must be at least 3 characters."
+        elif password != verify:
+            pass_err = "Your passwords don't match."
+
+        #give feedback
+        if name_err != "" or pass_err != "":
+            return render_template("signup.html", username=username, name_err=name_err, pass_err=pass_err)
+        
         #all is well
+        newuser = User(username, password)
+        db.session.add(newuser)
+        db.session.commit()
         session['username'] = username
+        print(session)
         return redirect("/newpost")
 
     return render_template('signup.html')

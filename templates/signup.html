@@ -5,15 +5,23 @@
 <h1>Signup</h1>
 <form action="/signup" method="post">
     <label>Username
-        <input type="text" name="username" />
+        <input type="text" name="username" value="{{username}}" />
     </label>
+    {% if name_err %}
+        <br/>
+        <span class="error">{{ name_err }}</span>
+    {% endif %}
     <br/>
     <label>Password
-        <input type="text" name="password" />
+        <input type="password" name="password" />
     </label>
+    {% if pass_err %}
+    <br/>
+    <span class="error">{{ pass_err }}</span>
+    {% endif %}
     <br/>
     <label>Verify Password
-        <input type="text" name="verify" />
+        <input type="password" name="verify" />
     </label>
     <br/>
     <input type="submit" value="Submit" />
