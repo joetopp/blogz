@@ -146,5 +146,11 @@ def blog():
 def index():
     return redirect("/blog")
 
+@app.before_request
+def require_login():
+    blocked_routes = ['newpost']
+    if request.endpoint in blocked_routes and 'email' not in session:
+        return redirect('/login')
+
 if __name__ == "__main__":  
     app.run()
