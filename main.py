@@ -102,6 +102,11 @@ def signup():
 
     return render_template('signup.html')
 
+@app.route("/logout")
+def logout():
+    del session['username']
+    return redirect("/")
+
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
     if request.method == 'POST':
@@ -119,8 +124,8 @@ def newpost():
         if titleerr != "" or bodyerr != "":
             return render_template("newpost.html", titleerr=titleerr, bodyerr=bodyerr)
 
-        # TODO: add user to constructuor
-        newpost = Blog(title, body)
+        author = User.query.filter_by(username=session['username']).first()
+        newpost = Blog(title, body, author)
         db.session.add(newpost)
         db.session.commit()
         return redirect("/blog?id=" + str(newpost.id))
