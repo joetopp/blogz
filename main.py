@@ -144,12 +144,13 @@ def blog():
 
 @app.route("/")
 def index():
-    return redirect("/blog")
+    userlist = User.query.all()
+    return render_template("users.html", userlist=userlist)
 
 @app.before_request
 def require_login():
     blocked_routes = ['newpost']
-    if request.endpoint in blocked_routes and 'email' not in session:
+    if request.endpoint in blocked_routes and 'username' not in session:
         return redirect('/login')
 
 if __name__ == "__main__":  
