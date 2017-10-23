@@ -22,7 +22,7 @@ class Blog(db.Model):
         self.author = author
 
     def __repr__(self):
-        return '<Title ' + self.title + '>'
+        return '<Title ' + self.title + 'By:' + self.author.__repr__() + '>'
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,7 +59,7 @@ def login():
         #all is well
         session['username'] = username
         return redirect("/newpost")
-
+    
     return render_template('login.html')
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -139,7 +139,14 @@ def blog():
         post = Blog.query.filter_by(id=int(postid)).first()
         return render_template('post.html', title=post.title, body=post.body)
 
-    bloglist = Blog.query.all()
+    username = request.args.get("user")
+
+    if username:
+        userobj = User.query.filter_by(username=username).first()
+        userid = userobj.id
+        bloglist = Blog.query.filter_by(author_id=userid)
+    else:
+        bloglist = Blog.query.all()
     return render_template('blog.html', bloglist=bloglist)
 
 @app.route("/")
