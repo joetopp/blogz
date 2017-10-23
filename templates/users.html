@@ -5,7 +5,7 @@
 <h1 class="header">Users</h1>
 <ul>
     {% for user in userlist %}
-    <li>{{ user.username }}</li>
+    <a href="/blog?user={{ user.username }}" ><li>{{ user.username }}</li></a>
     {% endfor %}
 </ul>
 
